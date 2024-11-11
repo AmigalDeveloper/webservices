@@ -1,0 +1,10 @@
+{
+    "/js/template.js": {
+        "crossorigin": "anonymous",
+        "integrity": "sha384-8Hw6nxS/mlXhPlzl+P3F/U1F2mhZF4rgSxe1cBQ8d4pztuUHWJ7PoRG+l/BFrIAV"
+    },
+    "/css/template.css": {
+        "crossorigin": "anonymous",
+        "integrity": "sha384-sDmUczFF5j9FUDfpHwyc8tYSg7PzAE2qsZp8ajpm/vEe4LajWt9DPILphgJ4I52A"
+    }
+}

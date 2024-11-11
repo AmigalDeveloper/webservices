@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <!-- For Responsive -->
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <link rel="stylesheet" href="{{ asset('css/template.css', 'mix') }}" type="text/css"{{ sri('css/template.css') }}>
+        {% if appDebug %}
+            <link rel="stylesheet" href="{{ asset('css/debugbar.css') }}" type="text/css">
+        {% endif %}
+        <!-- End for Responsive -->
+
+        <!-- For SEO -->
+        <title>{% block title %}Joomla! Framework, a framework for developing PHP applications{% endblock %}</title>
+        <meta charset="utf-8">
+        <meta name="description" content="{% block metaDescription %}The Joomla! Framework provides a structurally sound foundation on which to build applications in PHP, which is easy to adapt and extend. Let's find out more!{% endblock %}">
+        <meta name="generator" content="Joomla! Framework" />
+        <meta property="og:description" content="{{ block('metaDescription') }}" />
+        <meta property="og:locale" content="en_US" />
+        <meta property="og:site_name" content="Joomla! Framework" />
+        <meta property="og:title" content="{{ block('title') }}" />
+        <meta property="og:type" content="{% block metaOgType %}website{% endblock %}" />
+        <meta property="og:url" content="{{ request_uri() }}" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@JoomlaFramework" />
+        <meta name="twitter:description" content="{{ block('metaDescription') }}" />
+        <meta name="twitter:title" content="{{ block('title') }}" />
+        {% block metadata %}{% endblock %}
+        <!-- End for SEO -->
+
+        <!-- For Misc -->
+        <link href="favicon.ico" rel="shortcut icon" />
+        <!-- End for misc -->
+
+        {% block headJavaScript %}
+        {% endblock %}
+    </head>
+    <body id="go">
+        {% block bodyNavigation %}
+            <nav class="container-fluid">
+                <ul>
+                    <li><a href="{{ route() }}"><span class="fab fa-joomla" aria-hidden="true"></span><span class="title">Framework</span></a></li>
+                    <li><a href="{{ route('status') }}"><span class="fas fa-wrench" aria-hidden="true"></span><span class="title">Status</span></a></li>
+                </ul>
+            </nav>
+        {% endblock %}
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+        <footer class="clearfix" role="contentinfo" id="resources">
+            {% block footerContent %}
+                {% import 'macros.twig' as macros  %}
+                <div class="container">
+                    {{ macros.footer_copyright() }}
+                </div>
+            {% endblock %}
+        </footer>
+
+        <script src="{{ asset('js/template.js', 'mix') }}"{{ sri('js/template.js') }}></script>
+        {% block bodyJavaScript %}{% endblock %}
+        {% if appDebug %}
+            <script src="{{ asset('js/debugbar.js') }}"></script>
+        {% endif %}
+    </body>
+</html>

@@ -1,0 +1,23 @@
+// Site Custom Variables
+
+$darker-black: #181818;
+$icon-color:   #676566;
+$go-h2:        #d3edfe;
+$marker-color: #c1bfbf;
+
+// Override Bootstrap variables
+
+$theme-colors: (
+  primary: #428bca,
+  success: #599e1f,
+  info: #306598
+);
+
+$body-bg: $darker-black !default;
+
+$link-color: #214a73;
+
+$font-family-sans-serif: 'Source Sans Pro', sans-serif;
+$font-family-monospace:  'Source Sans Pro', sans-serif;
+
+$headings-font-weight: 600;

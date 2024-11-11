@@ -1,0 +1,84 @@
+{% extends 'index.twig' %}
+
+{% block title %}Joomla! Framework Status{% endblock %}
+
+{% block metaDescription %}The current status of the Joomla! Framework.{% endblock %}
+
+{% block content %}
+<section class="status container">
+    <h1 class="centered-title">Latest Build Status</h1>
+    <table class="table table-striped table-sm nice-responsive-table">
+        <thead>
+            <tr>
+                <th scope="col">Package</th>
+                <th scope="col">Downloads</th>
+                <th scope="col">1.x Series</th>
+                <th scope="col">2.x Series</th>
+                <th scope="col">3.x Series</th>
+                <th scope="col">4.x Series</th>
+                <th scope="col">PRs</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% set _totalDownloads = 0 %}
+            {% for release in releases %}
+                <tr>
+                    <th scope="row" data-label="Package">
+                        <a href="https://github.com/joomla-framework/{{ release.package.repo }}"><span class="fab fa-github" aria-hidden="true"></span><span class="sr-only">Open {{ release.package.display }} on GitHub</span></a> <a href="{{ route('status/' ~ release.package.package) }}">{{ release.package.display }}</a>
+                        {% if release.package.deprecated %}
+                            <br><span class="badge badge-warning">Deprecated</span>
+                        {% endif %}
+                    </th>
+                    <td data-label="Downloads">
+                        {% set _totalDownloads = _totalDownloads + release.package.downloads %}
+                        {{ release.package.downloads|number_format }}
+                    </td>
+                    <td data-label="1.x Series">
+                        {% if not release.package.has_v1 %}
+                            N/A
+                        {% else %}
+                            {{ release.v1.version }}
+                            <a href="https://ci.joomla.org/joomla-framework/{{ release.package.repo }}"><img src="https://ci.joomla.org/api/badges/joomla-framework/{{ release.package.repo }}/status.svg?ref=refs/heads/1.x-dev" alt="Build Status" /></a>
+                        {% endif %}
+                    </td>
+                    <td data-label="2.x Series">
+                        {% if not release.package.has_v2 %}
+                            N/A
+                        {% else %}
+                            {{ release.v2.version }}
+                            <a href="https://ci.joomla.org/joomla-framework/{{ release.package.repo }}"><img src="https://ci.joomla.org/api/badges/joomla-framework/{{ release.package.repo }}/status.svg?ref=refs/heads/2.0-dev" alt="Build Status" /></a>
+                        {% endif %}
+                    </td>
+                    <td data-label="3.x Series">
+                        {% if not release.package.has_v3 %}
+                            N/A
+                        {% else %}
+                            {{ release.v3.version }}
+                            <a href="https://ci.joomla.org/joomla-framework/{{ release.package.repo }}"><img src="https://ci.joomla.org/api/badges/joomla-framework/{{ release.package.repo }}/status.svg?ref=refs/heads/3.x-dev" alt="Build Status" /></a>
+                        {% endif %}
+                    </td>
+                    <td data-label="4.x Series">
+                        {% if not release.package.has_v4 %}
+                            N/A
+                        {% else %}
+                            {{ release.v4.version }}
+                            <a href="https://ci.joomla.org/joomla-framework/{{ release.package.repo }}"><img src="https://ci.joomla.org/api/badges/joomla-framework/{{ release.package.repo }}/status.svg?ref=refs/heads/4.x-dev" alt="Build Status" /></a>
+                        {% endif %}
+                    </td>
+                    <td data-label="PRs">
+                        <a href="https://github.com/joomla-framework/{{ release.package.repo }}/pulls">{{ release.package.pullcount }}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td>Totals</td>
+                <td colspan="2"></td>
+                <td>{{ _totalDownloads|number_format }}</td>
+                <td colspan="2"></td>
+            </tr>
+        </tfoot>
+    </table>
+</section>
+{% endblock %}

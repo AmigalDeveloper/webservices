@@ -1,0 +1,14 @@
+{
+    "routes":[
+        { "methods":[],"pattern":"driverlogs","controller":"\\App\\Driverlog\\DriverlogController","rules":[],"defaults":[]},
+        { "methods":[],"pattern":"driverlog/timestamp","controller":"\\App\\Driverlog\\DriverlogController","rules":[],"defaults":{"task":"timestamp"}},
+        { "methods":[],"pattern":"driverlog/timestamp/:timestamp","controller":"\\App\\Driverlog\\DriverlogController","rules":[],"defaults":{"task":"timestamp"}},
+        { "methods":[],"pattern":"driverlog/:id","controller":"\\App\\Driverlog\\DriverlogController","rules":[],"defaults":[]},
+        
+        { "methods":["post","put","delete"],"pattern":"user","controller":"\\App\\User\\UserController","rules":[],"defaults":[]},
+        { "methods":["post","put"],"pattern":"user/login","controller":"\\App\\User\\UserController","rules":[],"defaults":{"task":"login"}},
+        { "methods":["post","put"],"pattern":"user/register","controller":"\\App\\User\\UserController","rules":[],"defaults":{"task":"register"}},
+        { "methods":["post","put"],"pattern":"user/logout","controller":"\\App\\User\\UserController","rules":[],"defaults":{"task":"logout"}},
+        { "methods":["post","put","delete"],"pattern":"user/:id","controller":"\\App\\User\\UserController","rules":[],"defaults":[]}
+    ]
+}

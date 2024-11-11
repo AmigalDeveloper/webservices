@@ -1,0 +1,36 @@
+{
+    "name": "joomla/filesystem",
+    "type": "joomla-package",
+    "description": "Joomla Filesystem Package",
+    "keywords": ["joomla", "framework", "filesystem"],
+    "homepage": "https://github.com/joomla/joomla-framework-filesystem",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "php": "^8.1.0"
+    },
+    "require-dev": {
+        "mikey179/vfsstream": "^1.6.11",
+        "phpunit/phpunit": "^9.5.28",
+        "joomla/test": "^3.0",
+        "squizlabs/php_codesniffer": "^3.7.2",
+        "phpstan/phpstan": "^1.10.7",
+        "phan/phan": "^5.4.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Joomla\\Filesystem\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Joomla\\Filesystem\\Tests\\": "Tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-2.0-dev": "2.0-dev",
+            "dev-3.x-dev": "3.0-dev"
+        }
+    }
+}

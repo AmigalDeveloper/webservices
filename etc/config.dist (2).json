@@ -1,0 +1,35 @@
+{
+    "database": {
+        "host": "localhost",
+        "user": "amigal_dk",
+        "password": "Desd@gdh300814",
+        "database": "amigal_dk",
+        "prefix": "app_"
+    },
+    "template": {
+        "debug": false,
+        "cache": {
+            "enabled": false,
+            "path": "cache/twig"
+        }
+    },
+    "analytics": {
+        "enabled": false,
+        "account": ""
+    },
+    "log": {
+        "level": "debug",
+        "application": "debug"
+    },
+    "github": {
+        "gh": {
+            "token": false
+        },
+        "api": {
+            "username": false,
+            "password": false
+        }
+    },
+    "errorReporting": 1,
+    "debug": true
+}
