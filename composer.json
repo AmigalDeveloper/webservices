@@ -51,7 +51,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Joomla\\FrameworkWebsite\\": "src/"
+            "Joomla\\FrameworkWebsite\\": "src/",
+            "Webservice\\": "src"
         }
     },
     "config": {
