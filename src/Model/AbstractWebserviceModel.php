@@ -46,4 +46,3 @@
         return $this->db->delete("", array( ""=> $id))->where("",   $this->id)->delete(); 
     }
   }
-?>
