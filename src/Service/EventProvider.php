@@ -16,6 +16,8 @@ use Joomla\Event\DispatcherInterface;
 use Joomla\FrameworkWebsite\EventListener\ErrorSubscriber;
 use Joomla\Renderer\RendererInterface;
 use Psr\Log\LoggerInterface;
+use Webservice\Model\AbstractWebserviceModel;
+use Webservice\View\WebserviceJsonView;
 
 /**
  * Event service provider
@@ -64,7 +66,7 @@ class EventProvider implements ServiceProviderInterface
      */
     public function getErrorSubscriber(Container $container): ErrorSubscriber
     {
-        $subscriber = new ErrorSubscriber($container->get(RendererInterface::class));
+       $subscriber = new ErrorSubscriber($container->get(RendererInterface::class));
         $subscriber->setLogger($container->get(LoggerInterface::class));
         return $subscriber;
     }

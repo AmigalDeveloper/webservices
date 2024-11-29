@@ -11,6 +11,7 @@ namespace Webservice\Controller;
 use Joomla\Application\AbstractWebApplication;
 use Joomla\Controller\AbstractController;
 use Joomla\Input\Input;
+use Joomla\Input\Json;
 use Joomla\View\JsonView;
 
 
@@ -26,12 +27,17 @@ class AbstractWebserviceController extends AbstractController
      */
 
     private $view;
-public function __construct(JsonView $view, Input $input, AbstractWebApplication $app){
+public function __construct(JsonView $view, Json $input, AbstractWebApplication $app){
     $this->view = $view;
     parent::__construct($input, $app);
 }
 
 public function execute():bool {
+    $method = $this->getInput()->getMethod();
+    $data = $this->getInput()->getData();
+    $this->view->$method($data);
+
+
 
 
         // Disable browser caching

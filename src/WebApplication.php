@@ -72,12 +72,20 @@ class WebApplication extends AbstractWebApplication
      */
     protected function doExecute(): void
     {
+        $this->getLogger()->debug(get_class($this) .' uri.route',[print_r($this->get('uri.route',''),true)]);
         $route = $this->router->parseRoute($this->get('uri.route', ''), $this->input->getMethod());
+        $this->getLogger()->debug('router info',[print_r($route, true)]);
         // Add variables to the input if not already set
         foreach ($route->getRouteVariables() as $key => $value) {
             $this->input->def($key, $value);
         }
+        $this->getLogger()->debug('resultat er controllerResolver',[print_r($this->controllerResolver->resolve($route), true)]);
 
+        //$this->allowCache(false);
+
+        // This is a JSON response
+        //$this->mimeType = 'application/json';
+        
         \call_user_func($this->controllerResolver->resolve($route));
     }
 }

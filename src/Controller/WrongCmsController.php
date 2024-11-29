@@ -10,6 +10,7 @@
 namespace Joomla\FrameworkWebsite\Controller;
 
 use Joomla\Controller\AbstractController;
+use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\Diactoros\Response\TextResponse;
 
 /**
@@ -29,7 +30,11 @@ class WrongCmsController extends AbstractController
     {
         // Enable browser caching
         $this->getApplication()->allowCache(true);
-        $response = new TextResponse("This isn't the CMS you're looking for.", 404);
+        $data = [
+            'code' => 404,
+            'message' => "This isn't the CMS you're looking for."
+        ];
+        $response = new JsonResponse($data, 404, [],JSON_UNESCAPED_UNICODE);
         $this->getApplication()->setResponse($response);
         return true;
     }

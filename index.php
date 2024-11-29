@@ -31,8 +31,8 @@ try {
         ->registerServiceProvider(new Joomla\FrameworkWebsite\Service\GitHubProvider())
         ->registerServiceProvider(new Joomla\FrameworkWebsite\Service\HttpProvider())
         ->registerServiceProvider(new Joomla\FrameworkWebsite\Service\LoggingProvider())
-        ->registerServiceProvider(new Joomla\Preload\Service\PreloadProvider())
-        ->registerServiceProvider(new Joomla\FrameworkWebsite\Service\TemplatingProvider());
+       ->registerServiceProvider(new Joomla\FrameworkWebsite\Service\TemplatingProvider());
+    ;
 
     // Conditionally include the DebugBar service provider based on the app being in debug mode
     if ((bool) $container->get('config')->get('debug', false)) {
@@ -51,11 +51,11 @@ try {
     error_reporting($errorReporting);
 
     // There is a circular dependency in building the HTTP driver while the application is being resolved, so it'll need to be set here for now
-    if ($container->has('debug.bar')) {
-        /** @var \DebugBar\DebugBar $debugBar */
-        $debugBar = $container->get('debug.bar');
-        $debugBar->setHttpDriver($container->get('debug.http.driver'));
-    }
+    // if ($container->has('debug.bar')) {
+    //     /** @var \DebugBar\DebugBar $debugBar */
+    //     $debugBar = $container->get('debug.bar');
+    //     $debugBar->setHttpDriver($container->get('debug.http.driver'));
+    // }
 } catch (\Throwable $e) {
     error_log($e);
 
@@ -65,15 +65,15 @@ try {
     exit(1);
 }
 
-if ($container->has('debug.bar')) {
-    /** @var \DebugBar\DebugBar $debugBar */
-    $debugBar = $container->get('debug.bar');
-    $debugBar->setHttpDriver($container->get('debug.http.driver'));
+// if ($container->has('debug.bar')) {
+//     /** @var \DebugBar\DebugBar $debugBar */
+//     $debugBar = $container->get('debug.bar');
+//     $debugBar->setHttpDriver($container->get('debug.http.driver'));
 
-    /** @var \DebugBar\DataCollector\TimeDataCollector $collector */
-    $collector = $debugBar['time'];
-    $collector->addMeasure('initialisation', APP_START, microtime(true));
-}
+//     /** @var \DebugBar\DataCollector\TimeDataCollector $collector */
+//     $collector = $debugBar['time'];
+//     $collector->addMeasure('initialisation', APP_START, microtime(true));
+// }
 
 // Execute the application
 try {

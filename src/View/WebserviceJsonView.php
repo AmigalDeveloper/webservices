@@ -36,4 +36,12 @@
     public function getModel(){
         return $this->model;
   }
+
+  public function setModel(AbstractWebserviceModel $model){ 
+    $this->model = $model;
+  }
+
+  public function get($data){
+    return $this->model->get($data);
+  }
 }
