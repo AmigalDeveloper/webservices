@@ -1,5 +1,5 @@
 {
-    "name": "amigal/webservice",
+    "name": "joomla/framework-website",
     "description": "Application code for framework.joomla.org",
     "homepage": "http://github.com/joomla/framework.joomla.org",
     "license": "GPL-2.0-or-later",
@@ -51,7 +51,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Amigal\\Webservice\\": ["src"]
+            "Joomla\\FrameworkWebsite\\": "src/",
+            "Joomla\\Webservice\\": "src/"
         }
     },
     "config": {

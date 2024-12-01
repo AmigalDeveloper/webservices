@@ -6,10 +6,10 @@
  * @license    http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License Version 2 or Later
  */
 
- namespace Webservice\View;
+ namespace Amigal\Webservice\View;
 
  use Joomla\View\JsonView;
- use Webservice\Model\AbstractWebserviceModel;
+ use Amigal\Webservice\Model\AbstractWebserviceModel;
  
  /**
   * Webservice View class
@@ -32,6 +32,17 @@
     public function __construct(AbstractWebserviceModel $model){
         $this->model = $model;  
     }
+
+    public function render($method= null,  $data=null) {
+      $modelData = $this->model->$method($data);
+      if (method_exists($this->model,$method)) {
+        $modelData = $this->model->$method($data);
+        $this->setData($modelData);
+      }
+      return parent::render();
+
+    }
+    
 
     public function getModel(){
         return $this->model;

@@ -7,12 +7,12 @@
  * @license    http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License Version 2 or Later
  */
 
-namespace Joomla\FrameworkWebsite\Helper;
+namespace Amigal\Webservice\Helper;
 
 use Joomla\Database\DatabaseInterface;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\ParameterType;
-use Joomla\FrameworkWebsite\PackageAware;
+use Amigal\Webservice\PackageAware;
 use Joomla\Http\Http;
 
 /**

@@ -7,13 +7,13 @@
  * @license    http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License Version 2 or Later
  */
 
-namespace Joomla\FrameworkWebsite\Service;
+namespace Amigal\Webservice\Service;
 
 use Joomla\DI\Container;
 use Joomla\DI\ServiceProviderInterface;
 use Joomla\Event\Dispatcher;
 use Joomla\Event\DispatcherInterface;
-use Joomla\FrameworkWebsite\EventListener\ErrorSubscriber;
+use Amigal\Webservice\EventListener\ErrorSubscriber;
 use Joomla\Renderer\RendererInterface;
 use Psr\Log\LoggerInterface;
 use Webservice\Model\AbstractWebserviceModel;

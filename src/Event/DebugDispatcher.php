@@ -7,7 +7,7 @@
  * @license    http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License Version 2 or Later
  */
 
-namespace Joomla\FrameworkWebsite\Event;
+namespace Amigal\Webservice\Event;
 
 use DebugBar\DebugBar;
 use Joomla\Event\DispatcherInterface;

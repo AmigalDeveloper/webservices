@@ -1,6 +1,6 @@
 <?php
 /**
- * Joomla! Framework Status Application
+ * Amigal Webservice 
  *
  * @copyright  Copyright (C) 2014 - 2017 Open Source Matters, Inc. All rights reserved.
  * @license    http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License Version 2 or Later
@@ -19,24 +19,28 @@ if (!file_exists(JPATH_ROOT . '/vendor/autoload.php')) {
     exit(500);
 }
 
-require JPATH_ROOT . '/vendor/autoload.php';
+require_once JPATH_ROOT . '/vendor/autoload.php';
+//require JPATH_ROOT . 'src/Service/ApplicationProvider.php';
+//use \Amigal\Webservice\Service\ApplicationProvider;
+
+
 
 // Wrap in a try/catch so we can display an error if need be
 try {
     $container = (new Joomla\DI\Container())
-        ->registerServiceProvider(new Joomla\FrameworkWebsite\Service\ApplicationProvider())
-        ->registerServiceProvider(new Joomla\FrameworkWebsite\Service\ConfigurationProvider(JPATH_ROOT . '/etc/config.json'))
+        ->registerServiceProvider(new Amigal\Webservice\Service\ApplicationProvider())
+        ->registerServiceProvider(new Amigal\Webservice\Service\ConfigurationProvider(JPATH_ROOT . '/etc/config.json'))
         ->registerServiceProvider(new Joomla\Database\Service\DatabaseProvider())
-        ->registerServiceProvider(new Joomla\FrameworkWebsite\Service\EventProvider())
-        ->registerServiceProvider(new Joomla\FrameworkWebsite\Service\GitHubProvider())
-        ->registerServiceProvider(new Joomla\FrameworkWebsite\Service\HttpProvider())
-        ->registerServiceProvider(new Joomla\FrameworkWebsite\Service\LoggingProvider())
-       ->registerServiceProvider(new Joomla\FrameworkWebsite\Service\TemplatingProvider());
+        ->registerServiceProvider(new Amigal\Webservice\Service\EventProvider())
+        ->registerServiceProvider(new Amigal\Webservice\Service\GitHubProvider())
+        ->registerServiceProvider(new Amigal\Webservice\Service\HttpProvider())
+        ->registerServiceProvider(new Amigal\Webservice\Service\LoggingProvider())
+        ->registerServiceProvider(new Amigal\Webservice\Service\TemplatingProvider());
     ;
 
     // Conditionally include the DebugBar service provider based on the app being in debug mode
     if ((bool) $container->get('config')->get('debug', false)) {
-        $container->registerServiceProvider(new Joomla\FrameworkWebsite\Service\DebugBarProvider());
+        $container->registerServiceProvider(new Amigal\Webservice\Service\DebugBarProvider());
     }
 
     // Alias the web application to Joomla's base application class as this is the primary application for the environment

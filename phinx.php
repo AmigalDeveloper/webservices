@@ -11,15 +11,15 @@ define('JPATH_ROOT', __DIR__);
 define('JPATH_TEMPLATES', JPATH_ROOT . '/templates');
 
 $container = (new Joomla\DI\Container)
-	->registerServiceProvider(new Joomla\FrameworkWebsite\Service\ApplicationProvider)
-	->registerServiceProvider(new Joomla\FrameworkWebsite\Service\ConfigurationProvider(JPATH_ROOT . '/etc/config.json'))
+	->registerServiceProvider(new Amigal\Webservice\Service\ApplicationProvider)
+	->registerServiceProvider(new Amigal\Webservice\Service\ConfigurationProvider(JPATH_ROOT . '/etc/config.json'))
 	->registerServiceProvider(new Joomla\Database\Service\DatabaseProvider)
-	->registerServiceProvider(new Joomla\FrameworkWebsite\Service\EventProvider)
-	->registerServiceProvider(new Joomla\FrameworkWebsite\Service\GitHubProvider)
-	->registerServiceProvider(new Joomla\FrameworkWebsite\Service\HttpProvider)
-	->registerServiceProvider(new Joomla\FrameworkWebsite\Service\LoggingProvider)
+	->registerServiceProvider(new Amigal\Webservice\Service\EventProvider)
+	->registerServiceProvider(new Amigal\Webservice\Service\GitHubProvider)
+	->registerServiceProvider(new Amigal\Webservice\Service\HttpProvider)
+	->registerServiceProvider(new Amigal\Webservice\Service\LoggingProvider)
 	->registerServiceProvider(new Joomla\Preload\Service\PreloadProvider)
-	->registerServiceProvider(new Joomla\FrameworkWebsite\Service\TemplatingProvider);
+	->registerServiceProvider(new Amigal\Webservice\Service\TemplatingProvider);
 
 // Alias the CLI application to Joomla's base application class as this is the primary application for the environment
 $container->alias(Joomla\Application\AbstractApplication::class, Joomla\Console\Application::class);

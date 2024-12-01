@@ -7,14 +7,14 @@
  * @license    http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License Version 2 or Later
  */
 
-namespace Joomla\FrameworkWebsite\EventListener;
+namespace Amigal\Webservice\EventListener;
 
 use Joomla\Application\ApplicationEvents;
 use Joomla\Application\Event\ApplicationErrorEvent;
 use Joomla\Console\ConsoleEvents;
 use Joomla\Console\Event\ApplicationErrorEvent as ConsoleApplicationErrorEvent;
 use Joomla\Event\SubscriberInterface;
-use Joomla\FrameworkWebsite\WebApplication;
+use Amigal\Webservice\WebApplication;
 use Joomla\Renderer\RendererInterface;
 use Joomla\Router\Exception\MethodNotAllowedException;
 use Joomla\Router\Exception\RouteNotFoundException;

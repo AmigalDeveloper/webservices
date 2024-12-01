@@ -7,15 +7,15 @@
  * @license    http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License Version 2 or Later
  */
 
-namespace Joomla\FrameworkWebsite\Service;
+namespace Amigal\Webservice\Service;
 
 use Joomla\Application\AbstractApplication;
 use Joomla\DI\Container;
 use Joomla\DI\ServiceProviderInterface;
-use Joomla\FrameworkWebsite\Asset\MixPathPackage;
-use Joomla\FrameworkWebsite\Renderer\ApplicationContext;
-use Joomla\FrameworkWebsite\Renderer\FrameworkExtension;
-use Joomla\FrameworkWebsite\Renderer\FrameworkTwigRuntime;
+use Amigal\Webservice\Asset\MixPathPackage;
+//use Amigal\Webservice\Renderer\ApplicationContext;
+//use Amigal\Webservice\Renderer\FrameworkExtension;
+//use Amigal\Webservice\Renderer\FrameworkTwigRuntime;
 use Joomla\Preload\PreloadManager;
 use Joomla\Renderer\RendererInterface;
 use Joomla\Renderer\TwigRenderer;
@@ -57,22 +57,22 @@ class TemplatingProvider implements ServiceProviderInterface
             ->share('twig.cache', [$this, 'getTwigCacheService'], true);
         $container->alias(Environment::class, 'twig.environment')
             ->share('twig.environment', [$this, 'getTwigEnvironmentService'], true);
-        $container->alias(DebugExtension::class, 'twig.extension.debug')
-            ->share('twig.extension.debug', [$this, 'getTwigExtensionDebugService'], true);
-        $container->alias(FrameworkExtension::class, 'twig.extension.framework')
-            ->share('twig.extension.framework', [$this, 'getTwigExtensionFrameworkService'], true);
+        // $container->alias(DebugExtension::class, 'twig.extension.debug')
+        //     ->share('twig.extension.debug', [$this, 'getTwigExtensionDebugService'], true);
+        // $container->alias(FrameworkExtension::class, 'twig.extension.framework')
+        //     ->share('twig.extension.framework', [$this, 'getTwigExtensionFrameworkService'], true);
         // This service cannot be protected as it is decorated when the debug bar is available
-        $container->alias(ProfilerExtension::class, 'twig.extension.profiler')
-            ->share('twig.extension.profiler', [$this, 'getTwigExtensionProfilerService']);
+        // $container->alias(ProfilerExtension::class, 'twig.extension.profiler')
+        //     ->share('twig.extension.profiler', [$this, 'getTwigExtensionProfilerService']);
         $container->alias(LoaderInterface::class, 'twig.loader')
             ->share('twig.loader', [$this, 'getTwigLoaderService'], true);
-        $container->alias(Profile::class, 'twig.profiler.profile')
-            ->share('twig.profiler.profile', [$this, 'getTwigProfilerProfileService'], true);
-        $container->alias(FrameworkTwigRuntime::class, 'twig.runtime.framework')
-            ->share('twig.runtime.framework', [$this, 'getTwigRuntimeFrameworkService'], true);
+        // $container->alias(Profile::class, 'twig.profiler.profile')
+        //     ->share('twig.profiler.profile', [$this, 'getTwigProfilerProfileService'], true);
+        // $container->alias(FrameworkTwigRuntime::class, 'twig.runtime.framework')
+        //     ->share('twig.runtime.framework', [$this, 'getTwigRuntimeFrameworkService'], true);
         $container->alias(ContainerRuntimeLoader::class, 'twig.runtime.loader')
             ->share('twig.runtime.loader', [$this, 'getTwigRuntimeLoaderService'], true);
-        $this->tagTwigExtensions($container);
+        // $this->tagTwigExtensions($container);
     }
 
     /**
@@ -82,18 +82,18 @@ class TemplatingProvider implements ServiceProviderInterface
      *
      * @return  Packages
      */
-    public function getAssetPackagesService(Container $container): Packages
-    {
-        /** @var AbstractApplication $app */
-        $app            = $container->get(AbstractApplication::class);
-        $context        = new ApplicationContext($app);
-        $mediaPath      = $app->get('uri.media.path', '/media/');
-        $defaultPackage = new PathPackage($mediaPath, new EmptyVersionStrategy(), $context);
-        $mixStrategy    = new MixPathPackage($defaultPackage, $mediaPath, new JsonManifestVersionStrategy(JPATH_ROOT . '/www/media/mix-manifest.json'), $context);
-        return new Packages($defaultPackage, [
-                'mix' => $mixStrategy,
-            ]);
-    }
+    // public function getAssetPackagesService(Container $container): Packages
+    // {
+    //     /** @var AbstractApplication $app */
+    //     $app            = $container->get(AbstractApplication::class);
+    //     $context        = new ApplicationContext($app);
+    //     $mediaPath      = $app->get('uri.media.path', '/media/');
+    //     $defaultPackage = new PathPackage($mediaPath, new EmptyVersionStrategy(), $context);
+    //     $mixStrategy    = new MixPathPackage($defaultPackage, $mediaPath, new JsonManifestVersionStrategy(JPATH_ROOT . '/www/media/mix-manifest.json'), $context);
+    //     return new Packages($defaultPackage, [
+    //             'mix' => $mixStrategy,
+    //         ]);
+    // }
 
     /**
      * Get the `renderer` service
@@ -161,10 +161,10 @@ class TemplatingProvider implements ServiceProviderInterface
      *
      * @return  DebugExtension
      */
-    public function getTwigExtensionDebugService(Container $container): DebugExtension
-    {
-        return new DebugExtension();
-    }
+    // public function getTwigExtensionDebugService(Container $container): DebugExtension
+    // {
+    //     return new DebugExtension();
+    // }
 
     /**
      * Get the `twig.extension.framework` service
@@ -173,10 +173,10 @@ class TemplatingProvider implements ServiceProviderInterface
      *
      * @return  FrameworkExtension
      */
-    public function getTwigExtensionFrameworkService(Container $container): FrameworkExtension
-    {
-        return new FrameworkExtension();
-    }
+    // public function getTwigExtensionFrameworkService(Container $container): FrameworkExtension
+    // {
+    //     return new FrameworkExtension();
+    // }
 
     /**
      * Get the `twig.extension.profiler` service
@@ -185,10 +185,10 @@ class TemplatingProvider implements ServiceProviderInterface
      *
      * @return  ProfilerExtension
      */
-    public function getTwigExtensionProfilerService(Container $container): ProfilerExtension
-    {
-        return new ProfilerExtension($container->get('twig.profiler.profile'));
-    }
+    // public function getTwigExtensionProfilerService(Container $container): ProfilerExtension
+    // {
+    //     return new ProfilerExtension($container->get('twig.profiler.profile'));
+    // }
 
     /**
      * Get the `twig.loader` service
@@ -209,10 +209,10 @@ class TemplatingProvider implements ServiceProviderInterface
      *
      * @return  Profile
      */
-    public function getTwigProfilerProfileService(Container $container): Profile
-    {
-        return new Profile();
-    }
+    // public function getTwigProfilerProfileService(Container $container): Profile
+    // {
+    //     return new Profile();
+    // }
 
     /**
      * Get the `twig.runtime.framework` service
@@ -221,10 +221,10 @@ class TemplatingProvider implements ServiceProviderInterface
      *
      * @return  FrameworkTwigRuntime
      */
-    public function getTwigRuntimeFrameworkService(Container $container): FrameworkTwigRuntime
-    {
-        return new FrameworkTwigRuntime($container->get(AbstractApplication::class), $container->get(PreloadManager::class), JPATH_ROOT . '/www/media/sri-manifest.json');
-    }
+    // public function getTwigRuntimeFrameworkService(Container $container): FrameworkTwigRuntime
+    // {
+    //     return new FrameworkTwigRuntime($container->get(AbstractApplication::class), $container->get(PreloadManager::class), JPATH_ROOT . '/www/media/sri-manifest.json');
+    // }
 
     /**
      * Get the `twig.runtime.loader` service
@@ -245,16 +245,16 @@ class TemplatingProvider implements ServiceProviderInterface
      *
      * @return  void
      */
-    private function tagTwigExtensions(Container $container): void
-    {
-        /** @var \Joomla\Registry\Registry $config */
-        $config         = $container->get('config');
-        $debug          = $config->get('template.debug', false);
-        $twigExtensions = ['twig.extension.framework'];
-        if ($debug) {
-            $twigExtensions[] = 'twig.extension.debug';
-        }
+    // private function tagTwigExtensions(Container $container): void
+    // {
+    //     /** @var \Joomla\Registry\Registry $config */
+    //     $config         = $container->get('config');
+    //     $debug          = $config->get('template.debug', false);
+    //     $twigExtensions = ['twig.extension.framework'];
+    //     if ($debug) {
+    //         $twigExtensions[] = 'twig.extension.debug';
+    //     }
 
-        $container->tag('twig.extension', $twigExtensions);
-    }
+    //     $container->tag('twig.extension', $twigExtensions);
+    // }
 }

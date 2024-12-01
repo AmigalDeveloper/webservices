@@ -7,54 +7,30 @@
  * @license    http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License Version 2 or Later
  */
 
-namespace Joomla\FrameworkWebsite\Service;
+namespace Amigal\Webservice\Service;
 
 use Joomla\Application\AbstractWebApplication;
 use Joomla\Application\Controller\ContainerControllerResolver;
 use Joomla\Application\Controller\ControllerResolverInterface;
 use Joomla\Application\Web\WebClient;
 use Joomla\Console\Application as ConsoleApplication;
-use Joomla\Console\Loader\ContainerLoader;
-use Joomla\Console\Loader\LoaderInterface;
 use Joomla\Database\DatabaseInterface;
 use Joomla\DI\Container;
 use Joomla\DI\ServiceProviderInterface;
 use Joomla\Event\Command\DebugEventDispatcherCommand;
 use Joomla\Event\DispatcherInterface;
-use Joomla\FrameworkWebsite\Command\GenerateSriCommand;
-use Joomla\FrameworkWebsite\Command\Package\SyncCommand as PackageSyncCommand;
-use Joomla\FrameworkWebsite\Command\Package\SyncPullsCommand;
-use Joomla\FrameworkWebsite\Command\Packagist\DownloadsCommand;
-use Joomla\FrameworkWebsite\Command\Packagist\SyncCommand as PackagistSyncCommand;
-use Joomla\FrameworkWebsite\Command\Twig\ResetCacheCommand;
-use Joomla\FrameworkWebsite\Command\UpdateCommand;
-use Joomla\FrameworkWebsite\Controller\Api\PackageControllerGet;
-use Joomla\FrameworkWebsite\Controller\Api\StatusControllerGet;
-use Joomla\FrameworkWebsite\Controller\HomepageController;
-use Joomla\FrameworkWebsite\Controller\PackageController;
-use Joomla\FrameworkWebsite\Controller\PageController;
-use Joomla\FrameworkWebsite\Controller\StatusController;
-use Joomla\FrameworkWebsite\Controller\WrongCmsController;
-use Joomla\FrameworkWebsite\Helper;
-use Joomla\FrameworkWebsite\Helper\PackagistHelper;
-use Joomla\FrameworkWebsite\Model\PackageModel;
-use Joomla\FrameworkWebsite\Model\ReleaseModel;
-use Joomla\FrameworkWebsite\View\Package\PackageHtmlView;
-use Joomla\FrameworkWebsite\View\Package\PackageJsonView;
-use Joomla\FrameworkWebsite\View\Status\StatusHtmlView;
-use Joomla\FrameworkWebsite\View\Status\StatusJsonView;
-use Joomla\FrameworkWebsite\WebApplication;
-use Joomla\Github\Github;
-use Joomla\Http\Http;
+use Amigal\Webservice\Controller\WrongCmsController;
+use Amigal\Webservice\WebApplication;
 use Joomla\Input\Input;
-use Joomla\Registry\Registry;
-use Joomla\Renderer\RendererInterface;
-use Joomla\Renderer\TwigRenderer;
+use Joomla\Input\Json;
 use Joomla\Router\Command\DebugRouterCommand;
 use Joomla\Router\Route;
 use Joomla\Router\Router;
 use Joomla\Router\RouterInterface;
 use Psr\Log\LoggerInterface;
+use Amigal\Webservice\Controller\AbstractWebserviceController;
+use Amigal\Webservice\Model\AbstractWebserviceModel;
+use Amigal\Webservice\View\WebserviceJsonView;
 
 
 /**
@@ -83,68 +59,42 @@ class ApplicationProvider implements ServiceProviderInterface
         /*
          * Application Helpers and Dependencies
          */
-        // $container->alias(ContainerLoader::class, LoaderInterface::class)
-        //     ->share(LoaderInterface::class, [$this, 'getCommandLoaderService'], true);
-        // // This service cannot be protected as it is decorated when the debug bar is available
         $container->alias(ContainerControllerResolver::class, ControllerResolverInterface::class)
             ->share(ControllerResolverInterface::class, [$this, 'getControllerResolverService']);
-        $container->alias(Helper::class, 'application.helper')
-            ->share('application.helper', [$this, 'getApplicationHelperService'], true);
-        $container->alias(PackagistHelper::class, 'application.helper.packagist')
-            ->share('application.helper.packagist', [$this, 'getApplicationHelperPackagistService'], true);
-        $container->share('application.packages', [$this, 'getApplicationPackagesService'], true);
+        // $container->alias(Helper::class, 'application.helper')
+        //     ->share('application.helper', [$this, 'getApplicationHelperService'], true);
+        // $container->alias(PackagistHelper::class, 'application.helper.packagist')
+        //     ->share('application.helper.packagist', [$this, 'getApplicationHelperPackagistService'], true);
+        // $container->share('application.packages', [$this, 'getApplicationPackagesService'], true);
         $container->share(WebClient::class, [$this, 'getWebClientService'], true);
         // This service cannot be protected as it is decorated when the debug bar is available
         $container->alias(RouterInterface::class, 'application.router')
             ->alias(Router::class, 'application.router')
             ->share('application.router', [$this, 'getApplicationRouterService']);
-        $container->share(Input::class, [$this, 'getInputClassService'], true);
+        $container->share(Input::class, [$this, 'getJsonClassService'], true);
+        $container->share(Json::class, [$this, 'getJsonClassService'], true);
 
         /*
          * Console Commands
          */
-        $container->share(DebugEventDispatcherCommand::class, [$this, 'getDebugEventDispatcherCommandService'], true);
-        $container->share(DebugRouterCommand::class, [$this, 'getDebugRouterCommandService'], true);
-        // $container->share(DownloadsCommand::class, [$this, 'getDownloadsCommandService'], true);
-        // $container->share(GenerateSriCommand::class, [$this, 'getGenerateSriCommandService'], true);
-        // $container->share(PackageSyncCommand::class, [$this, 'getPackageSyncCommandService'], true);
-        // $container->share(SyncPullsCommand::class, [$this, 'getPullSyncCommandService'], true);
-        // $container->share(PackagistSyncCommand::class, [$this, 'getPackagistSyncCommandService'], true);
-        // $container->share(ResetCacheCommand::class, [$this, 'getResetCacheCommandService'], true);
-        // $container->share(UpdateCommand::class, [$this, 'getUpdateCommandService'], true);
+        // $container->share(DebugEventDispatcherCommand::class, [$this, 'getDebugEventDispatcherCommandService'], true);
+        // $container->share(DebugRouterCommand::class, [$this, 'getDebugRouterCommandService'], true);
         
         /*
          * MVC Layer
          */
         // Controllers
-        // $container->alias(PackageControllerGet::class, 'controller.api.package')
-        //     ->share('controller.api.package', [$this, 'getControllerApiPackageService'], true);
-        // $container->alias(StatusControllerGet::class, 'controller.api.status')
-        //     ->share('controller.api.status', [$this, 'getControllerApiStatusService'], true);
-        // $container->alias(HomepageController::class, 'controller.homepage')
-        //     ->share('controller.homepage', [$this, 'getControllerHomepageService'], true);
-        // $container->alias(PackageController::class, 'controller.package')
-        //     ->share('controller.package', [$this, 'getControllerPackageService'], true);
-        // $container->alias(PageController::class, 'controller.page')
-        //     ->share('controller.page', [$this, 'getControllerPageService'], true);
-        // $container->alias(StatusController::class, 'controller.status')
-        //     ->share('controller.status', [$this, 'getControllerStatusService'], true);
+        $container->alias(AbstractWebserviceController::class, 'controller.webservice')
+            ->share('controller.webservice', [$this, 'getControllerWebserviceService'], true);
         $container->alias(WrongCmsController::class, 'controller.wrong.cms')
             ->share('controller.wrong.cms', [$this, 'getControllerWrongCmsService'], true);
         // Models
-        // $container->alias(PackageModel::class, 'model.package')
-        //     ->share('model.package', [$this, 'getModelPackageService'], true);
-        // $container->alias(ReleaseModel::class, 'model.release')
-        //     ->share('model.release', [$this, 'getModelReleaseService'], true);
-        // // Views
-        // $container->alias(PackageHtmlView::class, 'view.package.html')
-        //     ->share('view.package.html', [$this, 'getViewPackageHtmlService'], true);
-        // $container->alias(PackageJsonView::class, 'view.package.json')
-        //     ->share('view.package.json', [$this, 'getViewPackageJsonService'], true);
-        // $container->alias(StatusHtmlView::class, 'view.status.html')
-        //     ->share('view.status.html', [$this, 'getViewStatusHtmlService'], true);
-        // $container->alias(StatusJsonView::class, 'view.status.json')
-        //     ->share('view.status.json', [$this, 'getViewStatusJsonService'], true);
+        $container->alias(AbstractWebserviceModel::class,'model.webservice')
+        ->share('model.webservice', [$this,'getModelWebserviceService'], true);
+
+        // views
+        $container->alias(WebserviceJsonView::class, 'view.webservice.json')
+            ->share('view.webservice.json', [$this, 'getViewWebserviceJsonService'], true);
     }
 
 
@@ -156,12 +106,12 @@ class ApplicationProvider implements ServiceProviderInterface
      *
      * @return  Helper
      */
-    public function getApplicationHelperService(Container $container): Helper
-    {
-        $helper = new Helper();
-        // $helper->setPackages($container->get('application.packages'));
-        return $helper;
-    }
+    // public function getApplicationHelperService(Container $container): Helper
+    // {
+    //     $helper = new Helper();
+    //     // $helper->setPackages($container->get('application.packages'));
+    //     return $helper;
+    // }
 
     /**
      * Get the `application.helper.packagist` service
@@ -170,12 +120,12 @@ class ApplicationProvider implements ServiceProviderInterface
      *
      * @return  PackagistHelper
      */
-    public function getApplicationHelperPackagistService(Container $container): PackagistHelper
-    {
-        $helper = new PackagistHelper($container->get(Http::class), $container->get(DatabaseInterface::class));
-        // $helper->setPackages($container->get('application.packages'));
-        return $helper;
-    }
+    // public function getApplicationHelperPackagistService(Container $container): PackagistHelper
+    // {
+    //     $helper = new PackagistHelper($container->get(Http::class), $container->get(DatabaseInterface::class));
+    //     // $helper->setPackages($container->get('application.packages'));
+    //     return $helper;
+    // }
 
     /**
      * Get the `application.packages` service
@@ -184,50 +134,11 @@ class ApplicationProvider implements ServiceProviderInterface
      *
      * @return  Registry
      */
-    public function getApplicationPackagesService(Container $container): Registry
-    {
-        return (new Registry())->loadFile(JPATH_ROOT . '/packages.yml', 'YAML');
-    }
-    
-    // /**
-    //  * Get the `application.helper` service
-    //  *
-    //  * @param   Container  $container  The DI container.
-    //  *
-    //  * @return  Helper
-    //  */
-    // public function getApplicationHelperService(Container $container): Helper
-    // {
-    //     $helper = new Helper();
-    //     $helper->setPackages($container->get('application.packages'));
-    //     return $helper;
-    // }
-
-    // /**
-    //  * Get the `application.helper.packagist` service
-    //  *
-    //  * @param   Container  $container  The DI container.
-    //  *
-    //  * @return  PackagistHelper
-    //  */
-    // public function getApplicationHelperPackagistService(Container $container): PackagistHelper
-    // {
-    //     $helper = new PackagistHelper($container->get(Http::class), $container->get(DatabaseInterface::class));
-    //     $helper->setPackages($container->get('application.packages'));
-    //     return $helper;
-    // }
-
-    // /**
-    //  * Get the `application.packages` service
-    //  *
-    //  * @param   Container  $container  The DI container.
-    //  *
-    //  * @return  Registry
-    //  */
     // public function getApplicationPackagesService(Container $container): Registry
     // {
     //     return (new Registry())->loadFile(JPATH_ROOT . '/packages.yml', 'YAML');
     // }
+    
     
     /**
      * Get the `application.router` service
@@ -251,7 +162,17 @@ class ApplicationProvider implements ServiceProviderInterface
         /*
          * Web routes
          */
-     $router->get('', WrongCmsController::class);
+     $router->addRoute(
+        new Route(
+            ['post','get'],
+            '', 
+            AbstractWebserviceController::class,
+            [],
+            [
+            "task" =>"timestamp"
+            ]
+        )
+    );
         /*
          * API routes
          */
@@ -275,16 +196,16 @@ class ApplicationProvider implements ServiceProviderInterface
     }
 
     // /**
-    //  * Get the `controller.status` service
+    //  * Get the `controller.webservice` service
     //  *
     //  * @param   Container  $container  The DI container.
     //  *
-    //  * @return  StatusController
+    //  * @return  AbstractWebserviceController
     //  */
-    // public function getControllerStatusService(Container $container): StatusController
-    // {
-    //     return new StatusController($container->get(StatusHtmlView::class), $container->get(Input::class), $container->get(WebApplication::class));
-    // }
+    public function getControllerWebserviceService(Container $container): AbstractWebserviceController
+    {
+        return new AbstractWebserviceController($container->get(WebserviceJsonView::class), $container->get(Input::class), $container->get(WebApplication::class));
+    }
 
     /**
      * Get the `controller.wrong.cms` service
@@ -322,30 +243,7 @@ class ApplicationProvider implements ServiceProviderInterface
         return new DebugRouterCommand($container->get(Router::class));
     }
 
-    // /**
-    //  * Get the DownloadsCommand service
-    //  *
-    //  * @param   Container  $container  The DI container.
-    //  *
-    //  * @return  DownloadsCommand
-    //  */
-    // public function getDownloadsCommandService(Container $container): DownloadsCommand
-    // {
-    //     return new DownloadsCommand($container->get(PackagistHelper::class));
-    // }
-
-    // /**
-    //  * Get the GenerateSriCommand service
-    //  *
-    //  * @param   Container  $container  The DI container.
-    //  *
-    //  * @return  GenerateSriCommand
-    //  */
-    // public function getGenerateSriCommandService(Container $container): GenerateSriCommand
-    // {
-    //     return new GenerateSriCommand();
-    // }
-
+   
     /**
      * Get the Input class service
      *
@@ -357,142 +255,43 @@ class ApplicationProvider implements ServiceProviderInterface
     {
         return new Input($_REQUEST);
     }
+    /**
+     * Get the Input class service
+     *
+     * @param   Container  $container  The DI container.
+     *
+     * @return  Input
+     */
+    public function getJsonClassService(Container $container): Json
+    {
+        return new Json();
+    }
 
+   
     // /**
-    //  * Get the `model.package` service
-    //  *
-    //  * @param   Container  $container  The DI container.
-    //  *
-    //  * @return  PackageModel
-    //  */
-    // public function getModelPackageService(Container $container): PackageModel
-    // {
-    //     return new PackageModel($container->get(DatabaseInterface::class));
-    // }
-
-    // /**
-    //  * Get the `model.release` service
+    //  * Get the `model.webservice` service
     //  *
     //  * @param   Container  $container  The DI container.
     //  *
     //  * @return  ReleaseModel
     //  */
-    // public function getModelReleaseService(Container $container): ReleaseModel
-    // {
-    //     return new ReleaseModel($container->get(DatabaseInterface::class));
-    // }
+    public function getModelWebserviceService(Container $container): AbstractWebserviceModel
+    {
+        return new AbstractWebserviceModel($container->get(DatabaseInterface::class));
+    }
 
-    // /**
-    //  * Get the PackageSyncCommand service
-    //  *
-    //  * @param   Container  $container  The DI container.
-    //  *
-    //  * @return  PackageSyncCommand
-    //  */
-    // public function getPackageSyncCommandService(Container $container): PackageSyncCommand
-    // {
-    //     return new PackageSyncCommand($container->get(Helper::class), $container->get(PackageModel::class));
-    // }
-
-    // /**
-    //  * Get the SyncPullsCommand service
-    //  *
-    //  * @param   Container  $container  The DI container.
-    //  *
-    //  * @return  SyncPullsCommand
-    //  */
-    // public function getPullSyncCommandService(Container $container): SyncPullsCommand
-    // {
-    //     return new SyncPullsCommand($container->get(Github::class), $container->get(Helper::class), $container->get(DatabaseInterface::class));
-    // }
-
-    // /**
-    //  * Get the PackagistSyncCommand service
-    //  *
-    //  * @param   Container  $container  The DI container.
-    //  *
-    //  * @return  PackagistSyncCommand
-    //  */
-    // public function getPackagistSyncCommandService(Container $container): PackagistSyncCommand
-    // {
-    //     return new PackagistSyncCommand($container->get(Http::class), $container->get(PackageModel::class), $container->get(ReleaseModel::class));
-    // }
-
-    // /**
-    //  * Get the ResetCacheCommand service
-    //  *
-    //  * @param   Container  $container  The DI container.
-    //  *
-    //  * @return  ResetCacheCommand
-    //  */
-    // public function getResetCacheCommandService(Container $container): ResetCacheCommand
-    // {
-    //     return new ResetCacheCommand($container->get(TwigRenderer::class), $container->get('config'));
-    // }
-
-    // /**
-    //  * Get the UpdateCommand service
-    //  *
-    //  * @param   Container  $container  The DI container.
-    //  *
-    //  * @return  UpdateCommand
-    //  */
-    // public function getUpdateCommandService(Container $container): UpdateCommand
-    // {
-    //     return new UpdateCommand();
-    // }
-
-    // /**
-    //  * Get the `view.package.html` service
-    //  *
-    //  * @param   Container  $container  The DI container.
-    //  *
-    //  * @return  PackageHtmlView
-    //  */
-    // public function getViewPackageHtmlService(Container $container): PackageHtmlView
-    // {
-    //     $view = new PackageHtmlView($container->get('model.package'), $container->get('model.release'), $container->get(Helper::class), $container->get('renderer'));
-    //     $view->setLayout('package.twig');
-    //     return $view;
-    // }
-
-    // /**
-    //  * Get the `view.package.json` service
-    //  *
-    //  * @param   Container  $container  The DI container.
-    //  *
-    //  * @return  PackageJsonView
-    //  */
-    // public function getViewPackageJsonService(Container $container): PackageJsonView
-    // {
-    //     return new PackageJsonView($container->get('model.package'), $container->get('model.release'));
-    // }
-
-    // /**
-    //  * Get the `view.status.html` service
-    //  *
-    //  * @param   Container  $container  The DI container.
-    //  *
-    //  * @return  StatusHtmlView
-    //  */
-    // public function getViewStatusHtmlService(Container $container): StatusHtmlView
-    // {
-    //     $view = new StatusHtmlView($container->get('model.package'), $container->get('model.release'), $container->get('renderer'));
-    //     $view->setLayout('status.twig');
-    //     return $view;
-    // }
-
-    // /**
-    //  * Get the `view.status.json` service
-    //  *
-    //  * @param   Container  $container  The DI container.
-    //  *
-    //  * @return  StatusJsonView
-    //  */
-    // public function getViewStatusJsonService(Container $container): StatusJsonView
-    // {
-    //     return new StatusJsonView($container->get('model.package'), $container->get('model.release'));
-    // }
+   
+    /**
+     * Get the `view.webservice.json` service
+     *
+     * @param   Container  $container  The DI container.
+     *
+     * @return  WebserviceJsonView
+     */
+    public function getViewWebserviceJsonService(Container $container): WebserviceJsonView
+    {
+        return new WebserviceJsonView($container->get('model.webservice'));
+    }
 
     /**
      * Get the WebApplication class service

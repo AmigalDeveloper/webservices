@@ -7,7 +7,7 @@
  * @license    http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License Version 2 or Later
  */
 
-namespace Joomla\FrameworkWebsite\Service;
+namespace Amigal\Webservice\Service;
 
 use DebugBar\Bridge\MonologCollector;
 use DebugBar\Bridge\NamespacedTwigProfileCollector;
@@ -23,12 +23,12 @@ use Joomla\DI\Container;
 use Joomla\DI\Exception\DependencyResolutionException;
 use Joomla\DI\ServiceProviderInterface;
 use Joomla\Event\DispatcherInterface;
-use Joomla\FrameworkWebsite\Controller\DebugControllerResolver;
-use Joomla\FrameworkWebsite\DebugBar\JoomlaHttpDriver;
-use Joomla\FrameworkWebsite\DebugWebApplication;
-use Joomla\FrameworkWebsite\Event\DebugDispatcher;
-use Joomla\FrameworkWebsite\EventListener\DebugSubscriber;
-use Joomla\FrameworkWebsite\Router\DebugRouter;
+use Amigal\Webservice\Controller\DebugControllerResolver;
+use Amigal\Webservice\DebugBar\JoomlaHttpDriver;
+use Amigal\Webservice\DebugWebApplication;
+use Amigal\Webservice\Event\DebugDispatcher;
+use Amigal\Webservice\EventListener\DebugSubscriber;
+use Amigal\Webservice\Router\DebugRouter;
 use Joomla\Input\Input;
 use Joomla\Router\RouterInterface;
 use Psr\Log\LoggerInterface;
